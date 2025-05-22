@@ -220,6 +220,124 @@
           transform: rotate(360deg);
         }
       }
+      .nav-link {
+        position: relative;
+        padding: 12px 20px;
+        border-radius: 8px;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        background: rgba(255, 255, 255, 0.02);
+        backdrop-filter: blur(10px);
+        border: 1px solid transparent;
+        overflow: hidden;
+      }
+
+      .nav-link::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(59, 130, 246, 0.2),
+          transparent
+        );
+        transition: left 0.5s ease;
+      }
+
+      .nav-link::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
+        transition: all 0.4s ease;
+        transform: translateX(-50%);
+      }
+
+      .nav-link:hover {
+        color: #ffffff;
+        background: rgba(59, 130, 246, 0.1);
+        border-color: rgba(59, 130, 246, 0.3);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(59, 130, 246, 0.2);
+      }
+
+      .nav-link:hover::before {
+        left: 100%;
+      }
+
+      .nav-link:hover::after {
+        width: 100%;
+      }
+
+      .nav-link.text-blue-400 {
+        background: rgba(59, 130, 246, 0.15);
+        border-color: rgba(59, 130, 246, 0.4);
+        color: #60a5fa;
+      }
+
+      .nav-link.text-blue-400::after {
+        width: 100%;
+      }
+
+      /* Animation pour le menu mobile responsive */
+      @media (max-width: 768px) {
+        .mobile-nav {
+          position: fixed;
+          top: 0;
+          right: -100%;
+          width: 100%;
+          height: 100vh;
+          background: rgba(15, 23, 42, 0.95);
+          backdrop-filter: blur(20px);
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          gap: 2rem;
+          transition: right 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+          z-index: 1000;
+        }
+
+        .mobile-nav.active {
+          right: 0;
+        }
+
+        .hamburger {
+          display: flex;
+          flex-direction: column;
+          cursor: pointer;
+          width: 30px;
+          height: 24px;
+          justify-content: space-between;
+          transition: all 0.3s ease;
+        }
+
+        .hamburger span {
+          width: 100%;
+          height: 3px;
+          background: #ffffff;
+          border-radius: 2px;
+          transition: all 0.3s ease;
+        }
+
+        .hamburger.active span:nth-child(1) {
+          transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+          opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+          transform: rotate(-45deg) translate(7px, -6px);
+        }
+      }
     </style>
   </head>
 
@@ -280,25 +398,34 @@
             </p>
           </div>
         </div>
-        <div class="hidden md:flex gap-6 card-reveal-delay">
-          <a
-            href="#about"
-            class="text-gray-300 hover:text-white transition-colors interactive nav-link"
+
+        <!-- Navigation desktop -->
+        <div class="hidden md:flex gap-2 card-reveal-delay">
+          <a href="#about" class="nav-link interactive">À propos</a>
+          <a href="#contact" class="nav-link interactive">Contact</a>
+          <a href="#skills" class="nav-link interactive">Compétences</a>
+          <a href="#social" class="nav-link interactive">Réseaux</a>
+        </div>
+
+        <!-- Bouton hamburger pour mobile -->
+        <div class="md:hidden hamburger interactive" id="hamburger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+
+        <!-- Menu mobile -->
+        <div class="mobile-nav" id="mobile-nav">
+          <a href="#about" class="nav-link interactive mobile-nav-link"
             >À propos</a
           >
-          <a
-            href="#contact"
-            class="text-gray-300 hover:text-white transition-colors interactive nav-link"
+          <a href="#contact" class="nav-link interactive mobile-nav-link"
             >Contact</a
           >
-          <a
-            href="#skills"
-            class="text-gray-300 hover:text-white transition-colors interactive nav-link"
+          <a href="#skills" class="nav-link interactive mobile-nav-link"
             >Compétences</a
           >
-          <a
-            href="#social"
-            class="text-gray-300 hover:text-white transition-colors interactive nav-link"
+          <a href="#social" class="nav-link interactive mobile-nav-link"
             >Réseaux</a
           >
         </div>
@@ -1012,6 +1139,168 @@
             }, 400);
           }
         }, 300);
+      });
+      // Ajoute ce JavaScript dans ton script existant
+
+      // Menu hamburger mobile
+      document.addEventListener("DOMContentLoaded", () => {
+        const hamburger = document.getElementById("hamburger");
+        const mobileNav = document.getElementById("mobile-nav");
+        const mobileNavLinks = document.querySelectorAll(".mobile-nav-link");
+
+        hamburger.addEventListener("click", () => {
+          hamburger.classList.toggle("active");
+          mobileNav.classList.toggle("active");
+
+          // Empêche le scroll quand le menu est ouvert
+          document.body.style.overflow = mobileNav.classList.contains("active")
+            ? "hidden"
+            : "auto";
+        });
+
+        // Ferme le menu mobile quand on clique sur un lien
+        mobileNavLinks.forEach((link) => {
+          link.addEventListener("click", () => {
+            hamburger.classList.remove("active");
+            mobileNav.classList.remove("active");
+            document.body.style.overflow = "auto";
+          });
+        });
+
+        // Ferme le menu mobile si on clique ailleurs
+        document.addEventListener("click", (e) => {
+          if (!hamburger.contains(e.target) && !mobileNav.contains(e.target)) {
+            hamburger.classList.remove("active");
+            mobileNav.classList.remove("active");
+            document.body.style.overflow = "auto";
+          }
+        });
+      });
+
+      // Animation avancée pour les liens de navigation
+      document.addEventListener("DOMContentLoaded", () => {
+        const navLinks = document.querySelectorAll(".nav-link");
+
+        navLinks.forEach((link) => {
+          // Effet de particules au hover
+          link.addEventListener("mouseenter", function (e) {
+            const rect = this.getBoundingClientRect();
+            const ripple = document.createElement("div");
+
+            ripple.style.position = "absolute";
+            ripple.style.width = "4px";
+            ripple.style.height = "4px";
+            ripple.style.background = "rgba(59, 130, 246, 0.6)";
+            ripple.style.borderRadius = "50%";
+            ripple.style.pointerEvents = "none";
+            ripple.style.left = e.clientX - rect.left + "px";
+            ripple.style.top = e.clientY - rect.top + "px";
+            ripple.style.transform = "scale(0)";
+            ripple.style.transition =
+              "transform 0.6s ease-out, opacity 0.6s ease-out";
+            ripple.style.zIndex = "1";
+
+            this.appendChild(ripple);
+
+            setTimeout(() => {
+              ripple.style.transform = "scale(20)";
+              ripple.style.opacity = "0";
+            }, 10);
+
+            setTimeout(() => {
+              if (ripple.parentNode) {
+                ripple.parentNode.removeChild(ripple);
+              }
+            }, 600);
+          });
+
+          // Son au hover (optionnel)
+          link.addEventListener("mouseenter", () => {
+            // Tu peux ajouter un son léger ici si tu veux
+            // new Audio('hover-sound.mp3').play().catch(() => {});
+          });
+        });
+      });
+
+      // Amélioration de la détection de section active
+      window.addEventListener("scroll", () => {
+        const sections = document.querySelectorAll("section");
+        const navLinks = document.querySelectorAll(".nav-link");
+        const scrollPos = window.pageYOffset + 100;
+
+        sections.forEach((section, index) => {
+          const sectionTop = section.offsetTop;
+          const sectionHeight = section.clientHeight;
+          const sectionId = section.getAttribute("id");
+
+          if (
+            scrollPos >= sectionTop &&
+            scrollPos < sectionTop + sectionHeight
+          ) {
+            navLinks.forEach((link) => {
+              link.classList.remove("text-blue-400", "font-medium");
+              if (link.getAttribute("href") === `#${sectionId}`) {
+                link.classList.add("text-blue-400", "font-medium");
+
+                // Animation subtle pour le lien actif
+                gsap.fromTo(
+                  link,
+                  { scale: 1 },
+                  {
+                    scale: 1.05,
+                    duration: 0.2,
+                    yoyo: true,
+                    repeat: 1,
+                    ease: "power2.inOut",
+                  }
+                );
+              }
+            });
+          }
+        });
+      });
+
+      // Effet de typing amélioré pour le header
+      document.addEventListener("DOMContentLoaded", () => {
+        const textElement = document.getElementById("role");
+        const texts = [
+          "Développeur Web Fullstack",
+          "Passionné de Technologie",
+          "Créateur d'Expériences Web",
+        ];
+        let textIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+
+        function typeWriter() {
+          const currentText = texts[textIndex];
+
+          if (isDeleting) {
+            textElement.textContent = currentText.substring(0, charIndex - 1);
+            charIndex--;
+          } else {
+            textElement.textContent = currentText.substring(0, charIndex + 1);
+            charIndex++;
+          }
+
+          let typeSpeed = isDeleting ? 50 : 100;
+
+          if (!isDeleting && charIndex === currentText.length) {
+            typeSpeed = 2000; // Pause à la fin
+            isDeleting = true;
+          } else if (isDeleting && charIndex === 0) {
+            isDeleting = false;
+            textIndex = (textIndex + 1) % texts.length;
+            typeSpeed = 500; // Pause avant le prochain texte
+          }
+
+          setTimeout(typeWriter, typeSpeed);
+        }
+
+        setTimeout(() => {
+          textElement.textContent = "";
+          typeWriter();
+        }, 1500);
       });
     </script>
   </body>
