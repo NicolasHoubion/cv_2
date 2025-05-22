@@ -234,13 +234,14 @@
         position: relative;
         padding: 12px 20px;
         border-radius: 8px;
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        overflow: hidden;
+        transition: all 0.3s ease;
+        background: rgba(59, 130, 246, 0.2) !important;
+        border: 2px solid rgba(59, 130, 246, 0.4) !important;
         color: #ffffff !important;
-        font-weight: 500;
+        font-weight: 600 !important;
+        text-decoration: none !important;
+        display: inline-block !important;
+        z-index: 1000 !important;
       }
 
       .nav-link::before {
@@ -351,10 +352,6 @@
           transform: rotate(-45deg) translate(7px, -6px);
         }
       }
-      .nav-link {
-        display: inline-block !important;
-        z-index: 1000;
-      }
 
       .mobile-nav {
         z-index: 9999;
@@ -389,8 +386,9 @@
     <div class="flex flex-col min-h-screen relative z-10">
       <!-- Header -->
       <header
-        class="flex items-center justify-between p-4 md:p-8 opacity-0"
+        class="flex items-center justify-between p-4 md:p-8 opacity-0 relative z-50"
         id="header"
+        style="background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(10px)"
       >
         <div class="flex items-center gap-6">
           <div class="relative group cursor-pointer">
@@ -422,13 +420,33 @@
 
         <!-- Navigation desktop -->
         <div
-          class="hidden md:flex gap-2 card-reveal-delay z-[1000]"
-          style="position: relative"
+          class="hidden md:flex gap-2 card-reveal-delay"
+          style="z-index: 1000; position: relative; opacity: 1 !important"
         >
-          <a href="#about" class="nav-link interactive">À propos</a>
-          <a href="#contact" class="nav-link interactive">Contact</a>
-          <a href="#skills" class="nav-link interactive">Compétences</a>
-          <a href="#social" class="nav-link interactive">Réseaux</a>
+          <a
+            href="#about"
+            class="nav-link interactive"
+            style="display: inline-block !important; opacity: 1 !important"
+            >À propos</a
+          >
+          <a
+            href="#contact"
+            class="nav-link interactive"
+            style="display: inline-block !important; opacity: 1 !important"
+            >Contact</a
+          >
+          <a
+            href="#skills"
+            class="nav-link interactive"
+            style="display: inline-block !important; opacity: 1 !important"
+            >Compétences</a
+          >
+          <a
+            href="#social"
+            class="nav-link interactive"
+            style="display: inline-block !important; opacity: 1 !important"
+            >Réseaux</a
+          >
         </div>
 
         <!-- Bouton hamburger pour mobile -->
